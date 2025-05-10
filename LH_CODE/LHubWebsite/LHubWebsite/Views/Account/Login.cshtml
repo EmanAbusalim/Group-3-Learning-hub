@@ -1,0 +1,26 @@
+@model LHubWebsite.Models.LoginViewModel
+
+<div class="login-container">
+    <img src="~/images/logo.png" alt="Logo" class="login-logo" />
+    <div class="login-title">Login</div>
+    <form asp-action="Login" method="post">
+        <input asp-for="Email" class="login-input" placeholder="example.email@gmail.com" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+
+        <input asp-for="Password" type="password" class="login-input" placeholder="Enter at least 8+ characters" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="login-error-message">@ViewBag.ErrorMessage</div>
+        }
+
+        <div class="login-btns">
+            <a class="btn-login-link" href="@Url.Action("Register", "Account")">New User? Sign Up</a>
+            <button type="submit" class="btn-login">Sign in</button>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

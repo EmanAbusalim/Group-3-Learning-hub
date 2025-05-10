@@ -1,0 +1,61 @@
+﻿@model LHubWebsite.Models.User
+@{
+    ViewData["Title"] = "Sign Up";
+    Layout = "_Layout";
+}
+
+<div class="signup-wrapper">
+    <!-- Logo Container (Left Side) -->
+    <div class="logo-container">
+        <img src="~/images/logo.png" alt="Website Logo" class="signup-logo" />
+    </div>
+
+    <!-- Form Container (Right Side) -->
+    <div class="form-container">
+        <h1>Sign Up</h1>
+        <p class="subheading">Sign up your account</p>
+
+        <form asp-action="Register" method="post" class="signup-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="username" class="sr-only"></label>
+                <div class="input-icon">
+                    <span class="icon">&#128100;</span>
+                    <input asp-for="username" class="form-control" placeholder="Username" />
+                </div>
+                <span asp-validation-for="username" class="text-danger">Required</span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="email" class="sr-only"></label>
+                <div class="input-icon">
+                    <span class="icon">&#9993;</span>
+                    <input asp-for="email" class="form-control" placeholder="What is your e-mail?" />
+                </div>
+                <span asp-validation-for="email" class="text-danger">Required</span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="password" class="sr-only"></label>
+                <div class="input-icon">
+                    <span class="icon">&#128274;</span>
+                    <input asp-for="password" type="password" class="form-control" placeholder="Enter your password" />
+                </div>
+                <span asp-validation-for="password" class="text-danger">Required</span>
+            </div>
+
+            @if (ViewData.ModelState.ErrorCount > 0)
+            {
+                <div class="error-message">
+                    @Html.ValidationSummary()
+                </div>
+            }
+
+            <button type="submit" class="btn-register">Register</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
