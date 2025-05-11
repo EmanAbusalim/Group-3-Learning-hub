@@ -1,0 +1,143 @@
+/* Reset and Base Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Layout */
+.signup-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Logo Section */
+.logo-container {
+    flex: 1;
+    text-align: center;
+}
+
+.signup-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* Form Section */
+.form-container {
+    flex: 1;
+    max-width: 400px;
+    width: 100%;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Typography */
+h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.subheading {
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+/* Form Elements */
+.signup-form .form-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Input Fields */
+.form-control {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    background: #f5f6fa;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #6c63ff;
+    background: #fff;
+}
+
+/* Input Icon Wrappers */
+.input-icon {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #bdbdbd;
+    font-size: 1.1rem;
+}
+
+.input-icon input {
+    padding-left: 2.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Error Messages */
+.text-danger {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.error-message {
+    color: #ff6f61;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Sign-Up Button */
+.btn-register {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.btn-register:hover {
+    background-color: #554ee2;
+}

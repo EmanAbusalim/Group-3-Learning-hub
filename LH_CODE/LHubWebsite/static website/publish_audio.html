@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Publish Audio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="audio.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Logo</div>
+    <span class="username">Welcome, User123</span>
+  </header>
+  <main>
+    <h1>Publish Audio</h1>
+    <input type="text" placeholder="Audio Title" id="audioTitle" />
+    <div class="audio-status">
+      <span id="recordingTime">0:00 / 5:00</span>
+    </div>
+    <p class="error hidden" id="audioError">Audio exceeds 5 minutes</p>
+    <div class="button-row">
+      <button class="cancel-btn" onclick="window.location.href='categories.html'">Cancel</button>
+      <button class="record-btn" id="recordBtn">Record</button>
+      <button class="pause-btn" id="pauseBtn">Pause</button>
+      <button class="publish-btn" id="publishAudioBtn">Publish</button>
+    </div>
+  </main>
+</body>
+</html>

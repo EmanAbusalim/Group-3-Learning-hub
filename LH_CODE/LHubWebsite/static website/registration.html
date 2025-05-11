@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="reg.css">
+</head>
+<body>
+    <div class="signup-wrapper">
+        <div class="logo-container">
+            <img src="logo.png" alt="Website Logo" class="signup-logo">
+        </div>
+
+        <div class="form-container">
+            <h1>Sign Up</h1>
+            <p class="subheading">Sign up your account</p>
+
+            <form action="register.html" method="post" class="signup-form">
+                <div class="form-group">
+                    <div class="input-icon">
+                        <span class="icon">&#128100;</span>
+                        <input type="text" class="form-control" placeholder="Username" required>
+                    </div>
+                    <span class="text-danger">Required</span>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-icon">
+                        <span class="icon">&#9993;</span>
+                        <input type="email" class="form-control" placeholder="What is your e-mail?" required>
+                    </div>
+                    <span class="text-danger">Required</span>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-icon">
+                        <span class="icon">&#128274;</span>
+                        <input type="password" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    <span class="text-danger">Required</span>
+                </div>
+
+                <button type="submit" class="btn-register">Register</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
