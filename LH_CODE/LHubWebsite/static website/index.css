@@ -1,0 +1,92 @@
+/* home-styles.css */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 10px 20px;
+}
+
+.logo img {
+    display: block;
+}
+
+.username {
+    font-size: 14px;
+}
+
+main {
+    padding: 20px;
+}
+
+.home-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.home-header h1 {
+    margin: 0 auto;
+    position: relative;
+    left: -300px;
+    font-weight: bold;
+    color: #888;
+    text-align: center;
+}
+
+.home-header button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: auto;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.subheader {
+    text-align: left;
+    color: #888;
+    margin-bottom: 20px;
+    margin-left: 80px;
+}
+
+.bell {
+    font-size: 20px;
+}
+
+.post-button {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+h2 {
+    text-align: left;
+    color: #888;
+    margin: 20px 0 20px 80px;
+}
