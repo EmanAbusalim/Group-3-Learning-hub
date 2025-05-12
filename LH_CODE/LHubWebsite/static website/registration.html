@@ -5,9 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="reg.css">
+    <style>
+        .password-container {
+            position: relative;
+        }
+
+        .info-bubble {
+            display: none;
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            width: 200px;
+            font-size: 14px;
+        }
+
+        .info-bubble::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 10px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+    </style>
 </head>
 <body>
+
     <div class="signup-wrapper">
+        <!-- Restored Logo Section -->
         <div class="logo-container">
             <img src="logo.png" alt="Website Logo" class="signup-logo">
         </div>
@@ -17,6 +47,7 @@
             <p class="subheading">Sign up your account</p>
 
             <form action="register.html" method="post" class="signup-form">
+
                 <div class="form-group">
                     <div class="input-icon">
                         <span class="icon">&#128100;</span>
@@ -33,10 +64,19 @@
                     <span class="text-danger">Required</span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group password-container">
                     <div class="input-icon">
                         <span class="icon">&#128274;</span>
-                        <input type="password" class="form-control" placeholder="Enter your password" required>
+                        <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                        <div class="info-bubble" id="infoBubble">
+                            Password must be:
+                            <ul>
+                                <li>At least 8 characters</li>
+                                <li>Contain a number</li>
+                                <li>Contain an uppercase letter</li>
+                                <li>Include a special character</li>
+                            </ul>
+                        </div>
                     </div>
                     <span class="text-danger">Required</span>
                 </div>
@@ -45,5 +85,19 @@
             </form>
         </div>
     </div>
+
+    <script>
+        const passwordField = document.getElementById("password");
+        const infoBubble = document.getElementById("infoBubble");
+
+        passwordField.addEventListener("focus", () => {
+            infoBubble.style.display = "block";
+        });
+
+        passwordField.addEventListener("blur", () => {
+            infoBubble.style.display = "none";
+        });
+    </script>
+
 </body>
 </html>
