@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home</title>
+  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_index.css" />
+  <script type="module" src="../LH_CODE_JS/LH_CODE_HomeLogic.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo">
+    </div>
+    <div class="user-section">
+      <span class="username">Welcome, User</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="home-header">
+      <button onclick="window.location.href='categories.html'">
+        Go to categories
+      </button>
+      <h1>Home</h1>
+    </div>
+
+    <h2 class="subheader">
+      Notifications from Followed Categories <span class="bell">🔔</span>
+    </h2>
+    <div class="notifications"></div>
+
+    <h2>Posts from Followed Categories (Based on Categories You Follow)</h2>
+    <div class="posts"></div>
+  </main>
+</body>
+</html>

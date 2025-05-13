@@ -1,0 +1,188 @@
+/* Base Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Layout */
+.signup-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Logo Section */
+.logo-container {
+    flex: 1;
+    text-align: center;
+}
+
+.signup-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* Form Section */
+.form-container {
+    flex: 1;
+    max-width: 400px;
+    width: 100%;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Typography */
+h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.subheading {
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+/* Input Fields */
+.input-icon {
+    position: relative;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.input-icon input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.input-icon input:focus {
+    outline: none;
+    border-color: #6c63ff;
+}
+
+.input-icon .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #bdbdbd;
+    font-size: 1.1rem;
+}
+
+/* Password Bubble */
+.password-container {
+    position: relative;
+}
+
+.info-bubble {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    z-index: 100;
+}
+
+.info-bubble ul {
+    margin: 5px 0 0 0;
+    padding-left: 20px;
+}
+
+.info-bubble::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+.password-container input:focus + .info-bubble {
+    display: block;
+}
+
+/* Error Messages */
+.error-message {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    text-align: left;
+}
+
+/* Button */
+button[type="submit"] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: #554ee2;
+}
+
+button[type="submit"]:disabled {
+    background-color: #b2aef8;
+    cursor: not-allowed;
+}
+
+/* Spinner */
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Invalid States */
+.input-icon.invalid .icon {
+    color: #e74c3c;
+}
+
+.input-icon.invalid input {
+    border-color: #e74c3c;
+}

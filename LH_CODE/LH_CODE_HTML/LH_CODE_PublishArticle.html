@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Publish Article</title>
+  <link rel="stylesheet" href="publisharticle.css" />
+  <script defer src="article.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo"><img src="logo.png" width="70" alt="Logo"></div>
+    <div class="user-section">
+      <span class="username">Welcome, User123</span>
+    </div>
+  </header>
+  <main>
+    <h1>Publish Article</h1>
+    <input type="text" id="articleTitle" placeholder="Article Title" />
+    <div class="textarea-container">
+      <textarea id="articleBody" placeholder="Write your article..."></textarea>
+      <div class="word-counter" id="wordCounter">0/1000 words</div>
+    </div>
+    <p class="error hidden" id="articleError">Article body exceeds 1000 words</p>
+    <div class="button-row">
+      <button class="cancel-btn" onclick="window.location.href='categories.html'">Cancel</button>
+      <button class="publish-btn">Publish</button>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,75 @@
+/* categories-styles.css */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 10px 20px;
+}
+
+.logo img {
+    display: block;
+}
+
+.username {
+    font-size: 14px;
+}
+
+main {
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: left;
+    color: #888;
+    margin-bottom: 20px;
+    margin-left: 80px;
+}
+
+select {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.follow-btn {
+    width: auto;
+    padding: 10px 20px;
+    background: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.post-button {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#publishSelect {
+    margin-top: 20px;
+}
