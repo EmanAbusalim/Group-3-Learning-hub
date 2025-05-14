@@ -40,6 +40,7 @@ h1, h2 {
     margin-left: 80px;
 }
 
+/* Global select rule (for publish dropdown and others not in controls) */
 select {
     display: block;
     width: 90%;
@@ -59,6 +60,7 @@ select {
     cursor: pointer;
 }
 
+/* Style for each individual post box */
 .post-button {
     display: block;
     width: 90%;
@@ -70,23 +72,37 @@ select {
     border-radius: 5px;
 }
 
-#publishSelect {
-    margin-top: 20px;
-}
+/* Publish select styling */
 #publishSelect {
     display: block;
-    width: 90%; /* ✅ Ensures consistency */
-    margin-left: 30px; /* ✅ Moves it slightly left */
+    width: 89%;  /* Ensures consistency */
+    margin-left: 30px; /* Moves it slightly left */
+    margin-top: 20px;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
-#postsContainer
-{
-    border: 2px solid #ddd;  /* ✅ Add border */
-    padding: 15px;  /* ✅ Add spacing inside */
-    margin: 10px 0;  /* ✅ Add space between posts */
-    background-color: #f9f9f9;  /* ✅ Slightly different background */
-    border-radius: 8px;  /* ✅ Rounded corners */
-    background:white;
+
+/* Posts container: uses flex-direction column with gap for separate boxes */
+#postsContainer {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* CATEGORY CONTROLS: Dropdown and Follow Button Side-by-Side */
+.category-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 96%;
+    margin: 10px auto;
+}
+
+.category-controls select {
+    flex: 1; /* This makes the select wide like the publish dropdown */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
