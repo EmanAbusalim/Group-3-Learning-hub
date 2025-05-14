@@ -90,3 +90,18 @@ input[type="text"] {
     margin: 0 auto;
     width: 90%;
 }
+.user-result-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.user-result-item:hover {
+  background-color: #f9f9f9;
+}
+
+.user-result-item.selected {
+  background-color: #d0eaff;
+  border: 1px solid #007BFF;
+}

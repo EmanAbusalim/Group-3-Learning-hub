@@ -1,17 +1,77 @@
 import { db, auth } from './LH_CODE_FirebaseConfig.js';
-import { collection, serverTimestamp, doc, getDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  collection, 
+  serverTimestamp, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  query, 
+  where, 
+  getDocs, 
+  increment 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Author: Abuzaid
-// Description: Fixed counter increment logic to properly generate sequential post IDs
+/**
+ * Checks whether the Firestore record for the given user exists.
+ * Returns true if the document is found, false otherwise.
+ */
+async function checkUserValidity(userId) {
+  try {
+    const userQuery = query(collection(db, "Users"), where("user_id", "==", userId));
+    const querySnapshot = await getDocs(userQuery);
+    return !querySnapshot.empty;
+  } catch (error) {
+    console.error("Error validating user:", error);
+    return false;
+  }
+}
 
-document.addEventListener('DOMContentLoaded', () => {
+/**
+ * Fetches the logged-in user's username from Firestore and updates the header.
+ */
+async function fetchUsername(userId) {
+  try {
+    const userQuery = query(collection(db, "Users"), where("user_id", "==", userId));
+    const userSnapshot = await getDocs(userQuery);
+    if (!userSnapshot.empty) {
+      const username = userSnapshot.docs[0].data().username;
+      document.querySelector('.username').textContent = `Welcome, ${username}`;
+    } else {
+      document.querySelector('.username').textContent = "Welcome, User";
+    }
+  } catch (error) {
+    console.error("Error fetching username:", error);
+    document.querySelector('.username').textContent = "Welcome, User";
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Prevent access unless the user is logged in.
+  const loggedInUserId = sessionStorage.getItem('loggedInUserId');
+  if (!loggedInUserId) {
+    window.location.href = 'LH_CODE_LOGIN.html';
+    return;
+  }
+  
+  // Check if the user's Firestore record exists.
+  const validUser = await checkUserValidity(loggedInUserId);
+  if (!validUser) {
+    alert("Your account record is not found. Please sign in again.");
+    sessionStorage.clear();
+    window.location.href = 'LH_CODE_LOGIN.html';
+    return;
+  }
+  
+  // Fetch and update the username dynamically from Firestore.
+  await fetchUsername(loggedInUserId);
+  
   const publishBtn = document.querySelector('.publish-btn');
   const titleField = document.getElementById('articleTitle');
   const bodyField = document.getElementById('articleBody');
   const wordCounter = document.getElementById('wordCounter');
   const articleError = document.getElementById('articleError');
   
-  // Get category from localStorage
+  // Get category from localStorage.
   const selectedCategory = localStorage.getItem('selectedCategory');
   
   if (!selectedCategory) {
@@ -23,9 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Initialize word counter
+  // Initialize the word counter.
   updateWordCounter();
 
+  // Add event listeners for form updates.
   titleField.addEventListener('input', validateForm);
   bodyField.addEventListener('input', () => {
     updateWordCounter();
@@ -39,42 +100,41 @@ document.addEventListener('DOMContentLoaded', () => {
       publishBtn.disabled = true;
       publishBtn.textContent = 'Publishing...';
       
-      // Get user ID from sessionStorage
-      const userId = sessionStorage.getItem('loggedInUserId');
+      // Already validated: get user ID from sessionStorage.
+      const userId = loggedInUserId;
       if (!userId) {
         throw new Error('You must be logged in to publish an article');
       }
 
-      // Get the current counter value
+      // Get the current counter value.
       const counterRef = doc(db, "counters", "postCounter");
       const counterDoc = await getDoc(counterRef);
       
       let postId;
       if (!counterDoc.exists()) {
-        // If no counter exists, check the highest existing post ID
+        // If no counter exists, determine the highest existing post ID.
         const postsRef = collection(db, "Posts");
         const postsSnapshot = await getDocs(postsRef);
         let maxId = 0;
         
-        postsSnapshot.forEach((doc) => {
-          const id = parseInt(doc.id);
+        postsSnapshot.forEach((docSnap) => {
+          const id = parseInt(docSnap.id);
           if (!isNaN(id) && id > maxId) {
             maxId = id;
           }
         });
         
         postId = (maxId + 1).toString();
-        // Initialize the counter with the next ID
+        // Initialize the counter with the next ID.
         await setDoc(counterRef, { count: maxId + 1 });
       } else {
-        // Get the current count and increment it
+        // Increment the counter.
         const currentCount = counterDoc.data().count;
         postId = (currentCount + 1).toString();
-        // Update the counter
         await setDoc(counterRef, { count: currentCount + 1 });
       }
 
-      // Create a new document with the post_id as the document ID
+      // Create a new document with the post_id as the document ID.
       const postRef = doc(db, "Posts", postId);
       await setDoc(postRef, {
         post_id: postId,
@@ -85,12 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
         created_at: serverTimestamp()
       });
 
-      // Clear form and localStorage
+      // Clear form and localStorage.
       titleField.value = '';
       bodyField.value = '';
       localStorage.removeItem('selectedCategory');
       
-      // Redirect to categories page
+      // Redirect to the categories page.
       window.location.href = 'LH_CODE_categories.html';
 
     } catch (error) {

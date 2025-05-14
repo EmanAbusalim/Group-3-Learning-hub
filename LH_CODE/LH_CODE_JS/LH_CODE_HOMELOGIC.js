@@ -22,10 +22,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // Check if the user's Firestore record exists.
+  const isValidUser = await checkUserValidity(loggedInUserId);
+  if (!isValidUser) {
+    alert("Your account record is not found. Please sign in again.");
+    sessionStorage.clear();
+    window.location.href = '../LH_CODE_HTML/LH_CODE_LOGIN.html';
+    return;
+  }
+  
   await fetchUserData(loggedInUserId);
   await fetchNotifications(loggedInUserId);
   await fetchFollowedPosts(loggedInUserId);
 });
+
+/**
+ * Checks whether the Firestore record for the given user exists.
+ */
+async function checkUserValidity(userId) {
+  try {
+    const userQuery = query(collection(db, "Users"), where("user_id", "==", userId));
+    const querySnapshot = await getDocs(userQuery);
+    return !querySnapshot.empty;
+  } catch (error) {
+    console.error("Error validating user:", error);
+    return false;
+  }
+}
 
 /*─────────────────────────────────────*/
 /* 2. Fetch & Display Logged-in Username */

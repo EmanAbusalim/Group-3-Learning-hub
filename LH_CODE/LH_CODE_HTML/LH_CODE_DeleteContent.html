@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <title>Delete Content</title>
-  <link rel="stylesheet" href="delete-content.html" />
+  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_deletecontent.css" />
+  <script type="module" src="../LH_CODE_JS/LH_CODE_deletecontent.js" defer></script>
 </head>
 <body>
   <header class="header">
-    <div class="logo"><img src="logo.png" width="70" alt="Logo"></div>
-    <div class="welcome">Welcome Admin</div>
+    <div class="logo">
+      <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo">
+    </div>
+    <!-- Dynamic username will be placed here -->
+    <div class="welcome">Welcome, Loading...</div>
   </header>
 
   <main class="admin-main">
@@ -16,12 +20,11 @@
     <input type="text" placeholder="Search by username" />
     <button class="btn search">Search</button>
 
-    <div class="content-result">
-      Content ID:123 Title:Kentucky Derby Coverage Expands (Posted by User123)
-    </div>
+    <!-- Container where search results (posts) will be injected -->
+    <div id="resultsContainer"></div>
 
     <button class="btn delete">Delete</button>
-    <button class="btn cancel" onclick="location.href='admin-home.html'">Cancel</button>
+    <button class="btn cancel" onclick="location.href='../LH_CODE_HTML/LH_CODE_AdminHome.html'">Cancel</button>
   </main>
 </body>
 </html>
