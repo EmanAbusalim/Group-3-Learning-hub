@@ -130,6 +130,11 @@ categorySelect.addEventListener("change", () => {
 publishSelect.addEventListener("change", () => {
     const selectedValue = publishSelect.value;
     if (selectedValue) {
+        // Store the selected category before navigation
+        const selectedCategory = categorySelect.value;
+        if (selectedCategory) {
+            localStorage.setItem('selectedCategory', selectedCategory);
+        }
         window.location.href = selectedValue;
     }
 });
