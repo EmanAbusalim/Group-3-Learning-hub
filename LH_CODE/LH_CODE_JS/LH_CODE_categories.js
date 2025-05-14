@@ -1,29 +1,28 @@
 import { db } from "../LH_CODE_JS/LH_CODE_FirebaseConfig.js"; 
 import { collection, getDocs, query, where, setDoc, doc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/** ✅ Ensure Follow Status Loads on Page Start */
-document.addEventListener("DOMContentLoaded", async () => {
-    const loggedInUserId = sessionStorage.getItem("loggedInUserId");
-    if (!loggedInUserId) {
-        window.location.replace("../LH_CODE_HTML/LH_CODE_LOGIN.html");
-        return;
-    }
-
-    await loadCategories();
-
-    if (categorySelect.options.length > 0) {
-        categorySelect.selectedIndex = 0;
-        updateFollowButtonText();
-    }
-});
-
 const categorySelect = document.getElementById("categorySelect");
 const postsContainer = document.getElementById("postsContainer");
 const publishSelect = document.getElementById("publishSelect");
 const followButton = document.querySelector(".follow-btn");
 const usernameDisplay = document.querySelector(".username");
 
-/** ✅ Fetch Username Dynamically */
+/** 
+ * INITIALIZE ON PAGE LOAD 
+ * Check for a logged-in user, load the username and categories.
+ */
+document.addEventListener("DOMContentLoaded", async () => {
+    const loggedInUserId = sessionStorage.getItem("loggedInUserId");
+    if (!loggedInUserId) {
+        window.location.replace("../LH_CODE_HTML/LH_CODE_LOGIN.html");
+        return;
+    }
+  
+    await fetchUsername(loggedInUserId);
+    await loadCategories();
+});
+
+/** FETCH THE LOGGED-IN USERNAME */
 async function fetchUsername(userId) {
     try {
         const userQuery = query(collection(db, "Users"), where("user_id", "==", userId));
@@ -39,23 +38,11 @@ async function fetchUsername(userId) {
     }
 }
 
-/** ✅ Load Username on Page Load */
-document.addEventListener("DOMContentLoaded", () => {
-    const loggedInUserId = sessionStorage.getItem("loggedInUserId");
-    if (!loggedInUserId) {
-        window.location.replace("../LH_CODE_HTML/LH_CODE_LOGIN.html");
-    } else {
-        fetchUsername(loggedInUserId);
-        loadCategories();
-    }
-});
-
-/** ✅ Load Categories into Dropdown */
+/** LOAD CATEGORIES INTO THE DROPDOWN */
 async function loadCategories() {
     try {
         const categoryQuery = query(collection(db, "Categories"));
         const categorySnapshot = await getDocs(categoryQuery);
-
         categorySelect.innerHTML = "";
 
         if (categorySnapshot.empty) {
@@ -63,10 +50,10 @@ async function loadCategories() {
             return;
         }
 
-        categorySnapshot.forEach((doc) => {
-            const category = doc.data();
+        categorySnapshot.forEach((docSnap) => {
+            const category = docSnap.data();
             const option = document.createElement("option");
-            option.value = doc.id;
+            option.value = docSnap.id;
             option.textContent = category.category_name;
             categorySelect.appendChild(option);
         });
@@ -82,14 +69,11 @@ async function loadCategories() {
     }
 }
 
-/** ✅ Fetch Posts Dynamically */
+/** FETCH POSTS FOR THE SELECTED CATEGORY */
 async function fetchPosts(categoryId) {
-    console.log("Fetching posts for category:", categoryId);
-
     try {
         const postsQuery = query(collection(db, "Posts"), where("category_id", "==", categoryId));
         const postsSnapshot = await getDocs(postsQuery);
-
         postsContainer.innerHTML = "";
 
         if (postsSnapshot.empty) {
@@ -97,21 +81,21 @@ async function fetchPosts(categoryId) {
             return;
         }
 
-        postsSnapshot.forEach((doc) => {
-            const post = doc.data();
+        postsSnapshot.forEach((docSnap) => {
+            const post = docSnap.data();
             const postElement = document.createElement("div");
-            postElement.classList.add("post");
+            postElement.classList.add("post-button");
 
-            // ✅ Add bold header for title
+            // Add title element
             const titleElement = document.createElement("h3");
             titleElement.textContent = post.title;
             postElement.appendChild(titleElement);
 
-            // ✅ Add content below
+            // Add content element
             const contentElement = document.createElement("p");
             contentElement.textContent = post.content;
             postElement.appendChild(contentElement);
-
+            
             postsContainer.appendChild(postElement);
         });
     } catch (error) {
@@ -120,26 +104,26 @@ async function fetchPosts(categoryId) {
     }
 }
 
-/** ✅ Handle Category Change */
+/** HANDLE CATEGORY CHANGE */
 categorySelect.addEventListener("change", () => {
     fetchPosts(categorySelect.value);
     updateFollowButtonText();
 });
 
-/** ✅ Handle Publish Selection */
+/** HANDLE PUBLISH SELECTION */
 publishSelect.addEventListener("change", () => {
     const selectedValue = publishSelect.value;
     if (selectedValue) {
-        // Store the selected category before navigation
+        // Save the current selected category for later use
         const selectedCategory = categorySelect.value;
         if (selectedCategory) {
-            localStorage.setItem('selectedCategory', selectedCategory);
+            localStorage.setItem("selectedCategory", selectedCategory);
         }
         window.location.href = selectedValue;
     }
 });
 
-/** ✅ Handle Follow/Unfollow */
+/** HANDLE FOLLOW/UNFOLLOW ACTION */
 followButton.addEventListener("click", async () => {
     const categoryId = categorySelect.value;
     const userId = sessionStorage.getItem("loggedInUserId");
@@ -153,12 +137,12 @@ followButton.addEventListener("click", async () => {
         const followDocSnap = await getDoc(followDocRef);
 
         if (followDocSnap.exists()) {
-            // ✅ Unfollow if already following
+            // Unfollow if already following
             await deleteDoc(followDocRef);
             followButton.textContent = "Follow";
             alert(`You have unfollowed ${categorySelect.options[categorySelect.selectedIndex].text}.`);
         } else {
-            // ✅ Follow if not already following
+            // Follow if not already following
             await setDoc(followDocRef, {
                 user_id: userId,
                 category_id: categoryId,
@@ -172,7 +156,7 @@ followButton.addEventListener("click", async () => {
     }
 });
 
-/** ✅ Check Follow Status */
+/** UPDATE FOLLOW BUTTON TEXT */
 async function updateFollowButtonText() {
     const categoryId = categorySelect.value;
     const userId = sessionStorage.getItem("loggedInUserId");
@@ -185,19 +169,9 @@ async function updateFollowButtonText() {
     try {
         const followDocRef = doc(db, "UserCategory", `${userId}_${categoryId}`);
         const followDocSnap = await getDoc(followDocRef);
-
-        if (followDocSnap.exists()) {
-            followButton.textContent = "Following";
-        } else {
-            followButton.textContent = "Follow";
-        }
+        followButton.textContent = followDocSnap.exists() ? "Following" : "Follow";
     } catch (error) {
         console.error("Error checking follow status:", error);
-        followButton.textContent = "Follow"; 
+        followButton.textContent = "Follow";
     }
 }
-
-/** ✅ Ensure Follow Status Updates on Page Load */
-document.addEventListener("DOMContentLoaded", () => {
-    updateFollowButtonText();
-});
