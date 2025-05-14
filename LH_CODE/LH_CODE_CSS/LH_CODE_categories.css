@@ -73,3 +73,20 @@ select {
 #publishSelect {
     margin-top: 20px;
 }
+#publishSelect {
+    display: block;
+    width: 90%; /* ✅ Ensures consistency */
+    margin-left: 30px; /* ✅ Moves it slightly left */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+#postsContainer
+{
+    border: 2px solid #ddd;  /* ✅ Add border */
+    padding: 15px;  /* ✅ Add spacing inside */
+    margin: 10px 0;  /* ✅ Add space between posts */
+    background-color: #f9f9f9;  /* ✅ Slightly different background */
+    border-radius: 8px;  /* ✅ Rounded corners */
+    background:white;
+}

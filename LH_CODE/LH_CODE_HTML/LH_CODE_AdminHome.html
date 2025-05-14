@@ -2,36 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Home</title>
-  <link rel="stylesheet" href="adminhome.css" />
+  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_adminhome.css" />
+  <script type="module" src="../LH_CODE_JS/LH_CODE_AdminLogic.js" defer></script>
 </head>
 <body>
   <header class="header">
-    <div class="logo"><img src="logo.png" width="70" alt="Logo"></div>
-    <div class="welcome">Welcome Admin</div>
+    <div class="logo">
+      <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo">
+    </div>
+    <div class="welcome">Welcome, <span class="username">Loading...</span></div>
   </header>
 
   <main class="admin-main">
-    <h1>Home(Admin)</h1>
     <div class="admin-tools">
-      <label for="admin-actions"><strong>Admin Tools</strong></label>
+      <label for="admin-actions"><strong>Admin Tools:</strong></label>
       <select id="admin-actions" onchange="handleAdminAction(this.value)">
         <option selected disabled>Select an action</option>
-        <option value="delete-content.html">Delete Content</option>
-        <option value="delete-user.html">Delete User</option>
+        <option value="LH_CODE_deletecontent.html">Delete Content</option>
+        <option value="LH_CODE_deleteuser.html">Delete User</option>
       </select>
     </div>
 
-    <h2>Posts from all categories</h2>
-    <div class="post">Kentucky Derby Coverage Expands</div>
-    <div class="post">Trump vs. Biden: Who Owns the Economy?</div>
-    <div class="post">Premier League Stars Flock to Kandima Resort</div>
+    <h2>Posts from All Categories</h2>
+    <div class="posts"></div>
   </main>
-
-  <script>
-    function handleAdminAction(url) {
-      if (url) window.location.href = url;
-    }
-  </script>
 </body>
 </html>

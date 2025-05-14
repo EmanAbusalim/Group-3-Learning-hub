@@ -1,150 +1,200 @@
-// LH_CODE_HomeLogic.js
-import { db } from "./firebaseConfig.js"; // Import db from your config file
+import { db } from "../LH_CODE_JS/LH_CODE_FirebaseConfig.js"; 
+import { 
+  collection, 
+  getDocs, 
+  query, 
+  where, 
+  doc, 
+  setDoc, 
+  deleteDoc, 
+  getDoc 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// DOM Elements
-const userId = sessionStorage.getItem("user_id");
-const usernameSpan = document.querySelector('.username');
-const notificationsDiv = document.querySelector('.notifications');
-const postsDiv = document.querySelector('.posts');
+/*─────────────────────────────────────*/
+/* 1. Initialization on Page Load      */
+/*─────────────────────────────────────*/
+document.addEventListener("DOMContentLoaded", async () => {
+  const loggedInUserId = sessionStorage.getItem("loggedInUserId");
 
-// Helper functions
-async function getUsername(userId) {
-  try {
-    const userDoc = await getDoc(doc(db, "users", userId));
-    return userDoc.exists() ? userDoc.data().username : "Unknown User";
-  } catch (error) {
-    console.error("Error getting username:", error);
-    return "Unknown User";
-  }
-}
-
-async function getFollowedCategories(userId) {
-  try {
-    const snapshot = await getDocs(collection(db, "usercategory"));
-    const followed = [];
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      if (data.user_id === userId) {
-        followed.push(data.Category_id);
-      }
-    });
-    return followed;
-  } catch (error) {
-    console.error("Error getting followed categories:", error);
-    return [];
-  }
-}
-
-async function getCategoriesMap() {
-  try {
-    const snapshot = await getDocs(collection(db, "categories"));
-    const map = {};
-    snapshot.forEach(doc => {
-      map[doc.id] = doc.data().category_name;
-    });
-    return map;
-  } catch (error) {
-    console.error("Error getting categories map:", error);
-    return {};
-  }
-}
-
-async function getPosts() {
-  try {
-    const snapshot = await getDocs(collection(db, "posts"));
-    const allPosts = [];
-    snapshot.forEach(doc => {
-      allPosts.push({ id: doc.id, ...doc.data() });
-    });
-    return allPosts;
-  } catch (error) {
-    console.error("Error getting posts:", error);
-    return [];
-  }
-}
-
-function truncate(content, length = 100) {
-  return content.length > length ? content.substring(0, length) + "..." : content;
-}
-
-function createPostElement(post, categoriesMap) {
-  const div = document.createElement("div");
-  div.className = "post-button";
-  div.innerHTML = `
-    <h3>${post.title}</h3>
-    <small>${categoriesMap[post.category_id] || 'Uncategorized'}</small>
-    <p>${truncate(post.content, 150)}</p>
-  `;
-  div.addEventListener('click', () => {
-    window.location.href = `post.html?id=${post.id}`;
-  });
-  return div;
-}
-
-async function populatePage() {
-  if (!userId) {
-    window.location.href = "login.html";
+  if (!loggedInUserId) {
+    console.error("User not authenticated! Redirecting to login...");
+    window.location.replace("../LH_CODE_HTML/LH_CODE_LOGIN.html");
     return;
   }
 
+  await fetchUserData(loggedInUserId);
+  await fetchNotifications(loggedInUserId);
+  await fetchFollowedPosts(loggedInUserId);
+});
+
+/*─────────────────────────────────────*/
+/* 2. Fetch & Display Logged-in Username */
+/*─────────────────────────────────────*/
+async function fetchUserData(loggedInUserId) {
   try {
-    const username = await getUsername(userId);
-    usernameSpan.textContent = `Welcome, ${username}`;
-
-    const [followed, categoriesMap, allPosts] = await Promise.all([
-      getFollowedCategories(userId),
-      getCategoriesMap(),
-      getPosts()
-    ]);
-
-    const seenPosts = JSON.parse(sessionStorage.getItem("seenPosts") || "[]");
-    const newPosts = [];
-    const followedPosts = [];
-
-    for (const post of allPosts) {
-      if (followed.includes(post.category_id)) {
-        followedPosts.push(post);
-        if (!seenPosts.includes(post.id)) {
-          newPosts.push(post);
-          seenPosts.push(post.id);
-        }
-      }
-    }
-
-    sessionStorage.setItem("seenPosts", JSON.stringify(seenPosts));
-
-    // Populate notifications
-    if (newPosts.length > 0) {
-      const notificationHeader = document.createElement('h3');
-      notificationHeader.textContent = 'New in your categories:';
-      notificationsDiv.appendChild(notificationHeader);
-
-      newPosts.forEach(post => {
-        notificationsDiv.appendChild(createPostElement(post, categoriesMap));
-      });
+    const userQuery = query(collection(db, "Users"), where("user_id", "==", loggedInUserId));
+    const userSnapshot = await getDocs(userQuery);
+    if (!userSnapshot.empty) {
+      document.querySelector(".username").textContent = `Welcome, ${userSnapshot.docs[0].data().username}`;
     } else {
-      notificationsDiv.innerHTML = '<p>No new posts in your followed categories.</p>';
+      document.querySelector(".username").textContent = "Welcome, Unknown User";
     }
-
-    // Populate followed posts
-    if (followedPosts.length > 0) {
-      const postsHeader = document.createElement('h3');
-      postsHeader.textContent = 'Posts from your categories:';
-      postsDiv.appendChild(postsHeader);
-
-      followedPosts.forEach(post => {
-        postsDiv.appendChild(createPostElement(post, categoriesMap));
-      });
-    } else {
-      postsDiv.innerHTML = '<p>No posts found in your followed categories.</p>';
-    }
-
   } catch (error) {
-    console.error("Error populating page:", error);
-    notificationsDiv.innerHTML = '<p>Error loading content. Please try again later.</p>';
-    postsDiv.innerHTML = '';
+    console.error("Error fetching user:", error);
   }
 }
 
-// Initialize the page
-document.addEventListener('DOMContentLoaded', populatePage);
+/*─────────────────────────────────────*/
+/* 3. Fetch Notifications for Followed Categories */
+/*─────────────────────────────────────*/
+async function fetchNotifications(loggedInUserId) {
+  try {
+    const userCategoryQuery = query(collection(db, "UserCategory"), where("user_id", "==", loggedInUserId));
+    const followedCategoriesSnapshot = await getDocs(userCategoryQuery);
+    if (followedCategoriesSnapshot.empty) {
+      document.querySelector(".notifications").innerHTML = "<p>No new posts.</p>";
+      updateNotificationCounter(0);
+      return;
+    }
+    
+    const followedCategoryIds = followedCategoriesSnapshot.docs.map(doc => doc.data().category_id);
+    const seenPostsQuery = query(collection(db, "SeenPosts"), where("user_id", "==", loggedInUserId));
+    const seenPostsSnapshot = await getDocs(seenPostsQuery);
+    const seenPostIds = seenPostsSnapshot.docs.map(doc => doc.data().post_id);
+    const postsQuery = query(collection(db, "Posts"), where("category_id", "in", followedCategoryIds));
+    const postsSnapshot = await getDocs(postsQuery);
+    
+    const notificationsContainer = document.querySelector(".notifications");
+    notificationsContainer.innerHTML = "";
+    
+    const categoryNames = {};
+    const categoryQuery = query(collection(db, "Categories"));
+    const categorySnapshot = await getDocs(categoryQuery);
+    categorySnapshot.forEach(doc => {
+      categoryNames[doc.id] = doc.data().category_name;
+    });
+
+    let unseenPostCount = 0;
+    postsSnapshot.forEach(postDoc => {
+      if (!seenPostIds.includes(postDoc.id)) {
+        unseenPostCount++;
+        const postData = postDoc.data();
+        const categoryName = categoryNames[postData.category_id] || "Unknown Category";
+        const notification = document.createElement("div");
+        notification.classList.add("post-button");
+        notification.textContent = `${categoryName}: ${postData.title}`;
+        notification.addEventListener("click", async () => {
+          await addSeenPost(loggedInUserId, postDoc.id);
+          notification.remove();
+          fetchNotifications(loggedInUserId);
+        });
+        notificationsContainer.appendChild(notification);
+      }
+    });
+
+    updateNotificationCounter(unseenPostCount);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+  }
+}
+
+/*─────────────────────────────────────*/
+/* 4. Mark a Post as Seen in Firestore */
+/*─────────────────────────────────────*/
+async function addSeenPost(userId, postId) {
+  try {
+    await setDoc(doc(db, "SeenPosts", `${userId}_${postId}`), {
+      user_id: userId,
+      post_id: postId,
+      seen_at: new Date()
+    });
+  } catch (error) {
+    console.error("Error marking post as seen:", error);
+  }
+}
+
+/*─────────────────────────────────────*/
+/* 5. Update the Notification Counter UI */
+/*─────────────────────────────────────*/
+function updateNotificationCounter(count) {
+  const bellIcon = document.querySelector(".bell");
+  const existingCounter = document.querySelector(".notification-counter");
+  if (existingCounter) existingCounter.remove();
+  
+  if (count > 0) {
+    const counter = document.createElement("span");
+    counter.classList.add("notification-counter");
+    counter.textContent = count;
+    counter.style.position = "absolute";
+    counter.style.top = "0px";
+    counter.style.right = "-10px";
+    counter.style.background = "red";
+    counter.style.color = "white";
+    counter.style.padding = "5px";
+    counter.style.borderRadius = "50%";
+    counter.style.fontSize = "12px";
+    counter.style.width = "20px";
+    counter.style.height = "20px";
+    counter.style.textAlign = "center";
+    bellIcon.style.position = "relative";
+    bellIcon.appendChild(counter);
+  }
+}
+
+/*─────────────────────────────────────*/
+/* 6. Fetch Posts from Followed Categories */
+/*─────────────────────────────────────*/
+async function fetchFollowedPosts(loggedInUserId) {
+  try {
+    const postsContainer = document.querySelector(".posts") || document.getElementById("postsContainer");
+    const userCategoryQuery = query(collection(db, "UserCategory"), where("user_id", "==", loggedInUserId));
+    const followedCategoriesSnapshot = await getDocs(userCategoryQuery);
+    if (followedCategoriesSnapshot.empty) {
+      postsContainer.innerHTML = "<p>You are not following any categories.</p>";
+      return;
+    }
+
+    const followedCategoryIds = followedCategoriesSnapshot.docs.map(doc => doc.data().category_id);
+    const postsQuery = query(collection(db, "Posts"), where("category_id", "in", followedCategoryIds));
+    const postsSnapshot = await getDocs(postsQuery);
+    
+    postsContainer.innerHTML = "";
+    if (postsSnapshot.empty) {
+      postsContainer.innerHTML = "<p>No posts available from followed categories.</p>";
+      return;
+    }
+
+    postsSnapshot.forEach(postDoc => {
+      const post = postDoc.data();
+      const postElement = document.createElement("div");
+      postElement.classList.add("post-button");
+
+      const titleElement = document.createElement("h3");
+      titleElement.textContent = post.title;
+      postElement.appendChild(titleElement);
+
+      if (!post.type || post.type === "text") {
+        const contentElement = document.createElement("p");
+        contentElement.textContent = post.content;
+        postElement.appendChild(contentElement);
+      } else if (post.type === "audio") {
+        const audioElement = document.createElement("audio");
+        audioElement.controls = true;
+        audioElement.src = post.content;
+        postElement.appendChild(audioElement);
+      } else if (post.type === "video") {
+        const videoElement = document.createElement("video");
+        videoElement.controls = true;
+        videoElement.width = "100%";
+        videoElement.src = post.content;
+        postElement.appendChild(videoElement);
+      } else {
+        postElement.innerHTML += "<p>Unsupported post format.</p>";
+      }
+
+      postsContainer.appendChild(postElement);
+    });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  }
+}

@@ -5,77 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categories</title>
     <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_categories.css">
+<script type="module" defer src="../LH_CODE_JS/LH_CODE_categories.js"></script>
+
+
+
 </head>
 <body>
+
     <header class="header">
-        <div class="logo"><img src="logo.png"  width="70" alt="Logo"></div>
-        <span class="username">Welcome, User123</span>
+        <div class="logo"><img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo"></div>
+        <span class="username">Welcome, Loading...</span> <!-- ✅ Username dynamically loads -->
     </header>
+
     <main>
         <h1>Categories</h1>
-        <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+
+        <!-- ✅ Category Selection -->
+        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px;">
             <select id="categorySelect">
-                <option value="sports">Sports</option>
-                <option value="economy">Economy</option>
+                <!-- ✅ Categories load dynamically -->
             </select>
             <button class="follow-btn">Follow</button>
         </div>
-        <h2>Posts in Selected Category</h2>
+
+        <!-- ✅ Publish Dropdown Below Follow Button -->
+  <div style="display: flex; justify-content: center; width: 100%;">
+    <select id="publishSelect">
+        <option value="">Publish...</option>
+        <option value="../LH_CODE_HTML/LH_CODE_PublishArticle.html">Publish Article</option>
+        <option value="../LH_CODE_HTML/LH_CODE_PublishAudio.html">Publish Audio</option>
+        <option value="../LH_CODE_HTML/LH_CODE_PublishVideo.html">Publish Video</option>
+    </select>
+</div>
+
+        <h2>Posts from Selected Category</h2>
         <div id="postsContainer">
-            <!-- Posts will be dynamically loaded here -->
+            <!-- ✅ Dynamic posts load here -->
         </div>
-        <select id="publishSelect">
-            <option value="">Publish...</option>
-            <option value="publish_article.html">Publish Article</option>
-            <option value="publish_audio.html">Publish Audio</option>
-            <option value="publish_video.html">Publish Video</option>
-        </select>
     </main>
-    <script>
-        const posts = {
-            sports: [
-                "Kentucky Derby Coverage Expands",
-                "Indian Sports Calendar for May",
-                "Premier League Stars Flock to Kandima Resort",
-                "Olympic Trials: New Records Set in Swimming",
-                "Local Team Wins National Championship"
-            ],
-            economy: [
-                "Global Markets Brace for Impact as Central Banks Signal Interest Rate",
-                "Trump vs. Biden: Who Owns the Economy?",
-                "Stock Market Hits Record High Amid Tech Boom",
-                "Unemployment Rates Drop to Historic Lows",
-                "Cryptocurrency Regulations Tighten Worldwide"
-            ]
-        };
 
-        const categorySelect = document.getElementById('categorySelect');
-        const postsContainer = document.getElementById('postsContainer');
-        const publishSelect = document.getElementById('publishSelect');
-
-        function renderPosts(category) {
-            postsContainer.innerHTML = '';
-            posts[category].forEach(post => {
-                const div = document.createElement('div');
-                div.className = 'post-button';
-                div.textContent = post;
-                postsContainer.appendChild(div);
-            });
-        }
-
-        categorySelect.addEventListener('change', () => {
-            renderPosts(categorySelect.value);
-        });
-
-        publishSelect.addEventListener('change', () => {
-            const selectedValue = publishSelect.value;
-            if (selectedValue) {
-                window.location.href = selectedValue;
-            }
-        });
-
-        // Load initial posts
-        renderPosts(categorySelect.value);
-    </script>
 </body>
 </html>
