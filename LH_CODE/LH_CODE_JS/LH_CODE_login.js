@@ -58,7 +58,7 @@ form.addEventListener('submit', async (e) => {
       return;
     }
   } catch (err) {
-    showError(1, "Invalid email or password");
+    showError(1, "Invalid credentials");
     console.error('Login failed:', err);
   } finally {
     signInButton.disabled = false;
