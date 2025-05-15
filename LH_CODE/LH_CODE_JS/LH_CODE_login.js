@@ -52,7 +52,7 @@ form.addEventListener('submit', async (e) => {
       }
     } else {
       console.error("User not found in Firestore.");
-      showError(1, "Error fetching user data.");
+      showError(1, "Invalid credentials.");
       signInButton.disabled = false;
       signInButton.textContent = 'Sign In';
       return;

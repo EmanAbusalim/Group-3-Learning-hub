@@ -160,20 +160,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  function validateForm() {
-    const validTitle = titleField.value.trim().length > 0;
-    const wordCount = countWords(bodyField.value);
-    const validBody = wordCount <= 1000;
+function validateForm() {
+    const titleValue = titleField.value.trim();
+    const bodyValue = bodyField.value.trim();
+    const wordCount = countWords(bodyValue);
     
-    if (wordCount > 1000) {
-      articleError.classList.remove('hidden');
-    } else {
-      articleError.classList.add('hidden');
+    // Clear previous errors
+    articleError.classList.add('hidden');
+    
+    if (!titleValue) {
+        showError('articleError', 'Title is required');
+        return false;
     }
-    
-    publishBtn.disabled = !(validTitle && validBody);
-    return !publishBtn.disabled;
-  }
+
+    if (!bodyValue) {
+        showError('articleError', 'Body is required');
+        return false;
+    }
+
+    if (wordCount > 1000) {
+        showError('articleError', 'Word limit has been exceeded');
+        return false;
+    }
+
+    publishBtn.disabled = false;
+    return true;
+}
+
 
   function countWords(text) {
     const words = text.trim().split(/\s+/);

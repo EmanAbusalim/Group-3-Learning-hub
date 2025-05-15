@@ -83,7 +83,7 @@ searchButton.addEventListener("click", async () => {
     });
     
     if (matchingUsers.length === 0) {
-      userResultDiv.innerHTML = `<p>No matching users found.</p>`;
+      userResultDiv.innerHTML = `<p>User was not found.</p>`;
       return;
     }
     
