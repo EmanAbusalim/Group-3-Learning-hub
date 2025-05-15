@@ -4,30 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Publish Video</title>
-  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_PublishAudio.css" />
+  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_PublishVideo.css" />
   <!-- Cloudinary Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
   <script type="module" defer src="../LH_CODE_JS/LH_CODE_Video.js"></script>
-
 </head>
 <body>
   <header class="header">
-    <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo" class="login-logo">
+    <a href="../LH_CODE_HTML/LH_CODE_Index.html">
+      <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo">
+    </a>
     <div class="user-section">
       <span class="username">Welcome, User123</span>
     </div>
   </header>
+
   <main>
     <h1>Publish Video</h1>
+    
+    <!-- Video Title Input -->
     <input type="text" id="videoTitle" placeholder="Video Title" />
+    
+    <!-- Error message for missing title -->
+    <p class="error" id="videoError"></p>
+
+    <!-- Video Status -->
     <div class="video-status">
       <span id="videoSize">0MB / 100MB</span>
-      
-      
     </div>
+    
     <small class="note">Allowed video format: MP4</small>
+
+    <!-- Hidden File Input -->
     <input type="file" id="videoInput" accept="video/mp4" hidden />
-    <p class="error hidden" id="videoError">File size exceeds 100MB</p>
+    
+    <!-- Buttons -->
     <div class="button-row">
       <button class="cancel-btn" onclick="window.location.href='LH_CODE_categories.html'">Cancel</button>
       <button class="publish-btn" id="uploadBtn">Upload Video</button>
