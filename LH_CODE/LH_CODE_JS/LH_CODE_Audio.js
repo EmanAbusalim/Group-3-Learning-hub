@@ -11,6 +11,7 @@ let startTime;
 let recordingInterval;
 let totalSeconds = 0; // Track total recording time
 let isPaused = false;
+const MAX_RECORDING_SECONDS = 300; // 5 minutes limit
 
 /**
  * Uploads audio to Cloudinary and returns the URL
@@ -220,7 +221,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (!audioTitle.value.trim()) {
-      showError('audioError', 'Please enter a title for your audio');
+      showError('audioError', 'Title is required');
+      return;
+    }
+
+    // Check if recording exceeds maximum allowed duration
+    if (totalSeconds > MAX_RECORDING_SECONDS) {
+      showError('audioError', `Recording exceeds 5 minutes`);
       return;
     }
 
@@ -294,20 +301,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  function startTimer() {
+function startTimer() {
     recordingInterval = setInterval(() => {
       totalSeconds++;
-      if (totalSeconds > 300) { // 5 minutes limit
-        mediaRecorder.stop();
-        clearInterval(recordingInterval);
-        showError('audioError', 'Audio exceeds 5 minutes');
-        return;
-      }
       const minutes = Math.floor(totalSeconds / 60);
       const remainingSeconds = totalSeconds % 60;
-      recordingTime.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, '0')} / 5:00`;
+      
+      // Restored the original timer format showing elapsed/max time
+      recordingTime.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, '0')} / ${Math.floor(MAX_RECORDING_SECONDS/60)}:${(MAX_RECORDING_SECONDS%60).toString().padStart(2, '0')}`;
+      
+      // Update timer color if exceeds limit
+      if (totalSeconds > MAX_RECORDING_SECONDS) {
+        recordingTime.style.color = 'red';
+      } else {
+        recordingTime.style.color = '';
+      }
     }, 1000);
   }
+
 
   function showError(elementId, message) {
     const errorElement = document.getElementById(elementId);
