@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Check if the user's Firestore record exists.
   const isValidUser = await checkUserValidity(loggedInUserId);
   if (!isValidUser) {
     alert("Your account record is not found. Please sign in again.");
@@ -52,11 +51,11 @@ async function checkUserValidity(userId) {
 
 /*─────────────────────────────────────*/
 /* 2. Fetch & Display Logged-in Username */
-/*─────────────────────────────────────*/
 async function fetchUserData(loggedInUserId) {
   try {
     const userQuery = query(collection(db, "Users"), where("user_id", "==", loggedInUserId));
     const userSnapshot = await getDocs(userQuery);
+    
     if (!userSnapshot.empty) {
       document.querySelector(".username").textContent = `Welcome, ${userSnapshot.docs[0].data().username}`;
     } else {
@@ -69,11 +68,11 @@ async function fetchUserData(loggedInUserId) {
 
 /*─────────────────────────────────────*/
 /* 3. Fetch Notifications for Followed Categories */
-/*─────────────────────────────────────*/
 async function fetchNotifications(loggedInUserId) {
   try {
     const userCategoryQuery = query(collection(db, "UserCategory"), where("user_id", "==", loggedInUserId));
     const followedCategoriesSnapshot = await getDocs(userCategoryQuery);
+    
     if (followedCategoriesSnapshot.empty) {
       document.querySelector(".notifications").innerHTML = "<p>No new posts.</p>";
       updateNotificationCounter(0);
@@ -89,7 +88,7 @@ async function fetchNotifications(loggedInUserId) {
     
     const notificationsContainer = document.querySelector(".notifications");
     notificationsContainer.innerHTML = "";
-    
+
     const categoryNames = {};
     const categoryQuery = query(collection(db, "Categories"));
     const categorySnapshot = await getDocs(categoryQuery);
@@ -123,7 +122,6 @@ async function fetchNotifications(loggedInUserId) {
 
 /*─────────────────────────────────────*/
 /* 4. Mark a Post as Seen in Firestore */
-/*─────────────────────────────────────*/
 async function addSeenPost(userId, postId) {
   try {
     await setDoc(doc(db, "SeenPosts", `${userId}_${postId}`), {
@@ -138,7 +136,6 @@ async function addSeenPost(userId, postId) {
 
 /*─────────────────────────────────────*/
 /* 5. Update the Notification Counter UI */
-/*─────────────────────────────────────*/
 function updateNotificationCounter(count) {
   const bellIcon = document.querySelector(".bell");
   const existingCounter = document.querySelector(".notification-counter");
@@ -165,13 +162,13 @@ function updateNotificationCounter(count) {
 }
 
 /*─────────────────────────────────────*/
-/* 6. Fetch Posts from Followed Categories */
-/*─────────────────────────────────────*/
+/* 6. Fetch Posts from Followed Categories (Updated to Use `media_url` & Resize Videos) */
 async function fetchFollowedPosts(loggedInUserId) {
   try {
     const postsContainer = document.querySelector(".posts") || document.getElementById("postsContainer");
     const userCategoryQuery = query(collection(db, "UserCategory"), where("user_id", "==", loggedInUserId));
     const followedCategoriesSnapshot = await getDocs(userCategoryQuery);
+
     if (followedCategoriesSnapshot.empty) {
       postsContainer.innerHTML = "<p>You are not following any categories.</p>";
       return;
@@ -180,39 +177,22 @@ async function fetchFollowedPosts(loggedInUserId) {
     const followedCategoryIds = followedCategoriesSnapshot.docs.map(doc => doc.data().category_id);
     const postsQuery = query(collection(db, "Posts"), where("category_id", "in", followedCategoryIds));
     const postsSnapshot = await getDocs(postsQuery);
-    
+
     postsContainer.innerHTML = "";
-    if (postsSnapshot.empty) {
-      postsContainer.innerHTML = "<p>No posts available from followed categories.</p>";
-      return;
-    }
 
     postsSnapshot.forEach(postDoc => {
       const post = postDoc.data();
       const postElement = document.createElement("div");
       postElement.classList.add("post-button");
 
-      const titleElement = document.createElement("h3");
-      titleElement.textContent = post.title;
-      postElement.appendChild(titleElement);
+      postElement.innerHTML = `<h3>${post.title}</h3>`;
 
-      if (!post.type || post.type === "text") {
-        const contentElement = document.createElement("p");
-        contentElement.textContent = post.content;
-        postElement.appendChild(contentElement);
-      } else if (post.type === "audio") {
-        const audioElement = document.createElement("audio");
-        audioElement.controls = true;
-        audioElement.src = post.content;
-        postElement.appendChild(audioElement);
+      if (post.type === "audio") {
+        postElement.innerHTML += `<audio controls src="${post.media_url}" crossorigin="anonymous"></audio>`;
       } else if (post.type === "video") {
-        const videoElement = document.createElement("video");
-        videoElement.controls = true;
-        videoElement.width = "100%";
-        videoElement.src = post.content;
-        postElement.appendChild(videoElement);
+        postElement.innerHTML += `<video controls width="400px" height="250px" src="${post.media_url}"></video>`;
       } else {
-        postElement.innerHTML += "<p>Unsupported post format.</p>";
+        postElement.innerHTML += `<p>${post.content}</p>`;
       }
 
       postsContainer.appendChild(postElement);
