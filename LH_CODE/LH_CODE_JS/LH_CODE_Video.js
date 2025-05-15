@@ -15,7 +15,7 @@ function showError(elementId, message) {
   errorElement.style.display = 'block'; // Ensure visibility
   errorElement.classList.remove('hidden'); // Remove hidden class
 
-  // Scroll to error for better user experience
+
   errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
