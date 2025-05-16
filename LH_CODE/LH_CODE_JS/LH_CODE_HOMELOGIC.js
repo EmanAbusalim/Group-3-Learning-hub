@@ -35,9 +35,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   await fetchFollowedPosts(loggedInUserId);
 });
 
-/**
- * Checks whether the Firestore record for the given user exists.
- */
+/*─────────────────────────────────────*/
+/* 2. Check User Validity               */
+/*─────────────────────────────────────*/
 async function checkUserValidity(userId) {
   try {
     const userQuery = query(collection(db, "Users"), where("user_id", "==", userId));
@@ -50,7 +50,8 @@ async function checkUserValidity(userId) {
 }
 
 /*─────────────────────────────────────*/
-/* 2. Fetch & Display Logged-in Username */
+/* 3. Fetch & Display Logged-in Username */
+/*─────────────────────────────────────*/
 async function fetchUserData(loggedInUserId) {
   try {
     const userQuery = query(collection(db, "Users"), where("user_id", "==", loggedInUserId));
@@ -67,14 +68,16 @@ async function fetchUserData(loggedInUserId) {
 }
 
 /*─────────────────────────────────────*/
-/* 3. Fetch Notifications for Followed Categories */
+/* 4. Fetch Notifications for Followed Categories */
+/*─────────────────────────────────────*/
 async function fetchNotifications(loggedInUserId) {
   try {
     const userCategoryQuery = query(collection(db, "UserCategory"), where("user_id", "==", loggedInUserId));
     const followedCategoriesSnapshot = await getDocs(userCategoryQuery);
+    const notificationsContainer = document.querySelector(".notifications");
     
     if (followedCategoriesSnapshot.empty) {
-      document.querySelector(".notifications").innerHTML = "<p>No new posts.</p>";
+      notificationsContainer.innerHTML = "<p>No new posts.</p>";
       updateNotificationCounter(0);
       return;
     }
@@ -83,37 +86,47 @@ async function fetchNotifications(loggedInUserId) {
     const seenPostsQuery = query(collection(db, "SeenPosts"), where("user_id", "==", loggedInUserId));
     const seenPostsSnapshot = await getDocs(seenPostsQuery);
     const seenPostIds = seenPostsSnapshot.docs.map(doc => doc.data().post_id);
+    
+    // Retrieve posts for the followed categories
     const postsQuery = query(collection(db, "Posts"), where("category_id", "in", followedCategoryIds));
     const postsSnapshot = await getDocs(postsQuery);
     
-    const notificationsContainer = document.querySelector(".notifications");
     notificationsContainer.innerHTML = "";
-
+    
+    // Retrieve category name mapping
     const categoryNames = {};
     const categoryQuery = query(collection(db, "Categories"));
     const categorySnapshot = await getDocs(categoryQuery);
     categorySnapshot.forEach(doc => {
       categoryNames[doc.id] = doc.data().category_name;
     });
-
+    
     let unseenPostCount = 0;
+    
     postsSnapshot.forEach(postDoc => {
-      if (!seenPostIds.includes(postDoc.id)) {
-        unseenPostCount++;
-        const postData = postDoc.data();
-        const categoryName = categoryNames[postData.category_id] || "Unknown Category";
-        const notification = document.createElement("div");
-        notification.classList.add("post-button");
-        notification.textContent = `${categoryName}: ${postData.title}`;
-        notification.addEventListener("click", async () => {
-          await addSeenPost(loggedInUserId, postDoc.id);
-          notification.remove();
-          fetchNotifications(loggedInUserId);
-        });
-        notificationsContainer.appendChild(notification);
+      const postData = postDoc.data();
+      
+      // Skip posts that have been cleared (i.e. empty title) or already seen.
+      if (!postData.title || postData.title.trim() === "" || seenPostIds.includes(postDoc.id)) {
+        return;
       }
+      
+      unseenPostCount++;
+      
+      const categoryName = categoryNames[postData.category_id] || "Unknown Category";
+      const notification = document.createElement("div");
+      notification.classList.add("post-button");
+      notification.textContent = `${categoryName}: ${postData.title}`;
+      
+      notification.addEventListener("click", async () => {
+        await addSeenPost(loggedInUserId, postDoc.id);
+        notification.remove();
+        fetchNotifications(loggedInUserId);
+      });
+      
+      notificationsContainer.appendChild(notification);
     });
-
+    
     updateNotificationCounter(unseenPostCount);
   } catch (error) {
     console.error("Error fetching notifications:", error);
@@ -121,7 +134,8 @@ async function fetchNotifications(loggedInUserId) {
 }
 
 /*─────────────────────────────────────*/
-/* 4. Mark a Post as Seen in Firestore */
+/* 5. Mark a Post as Seen in Firestore  */
+/*─────────────────────────────────────*/
 async function addSeenPost(userId, postId) {
   try {
     await setDoc(doc(db, "SeenPosts", `${userId}_${postId}`), {
@@ -135,7 +149,8 @@ async function addSeenPost(userId, postId) {
 }
 
 /*─────────────────────────────────────*/
-/* 5. Update the Notification Counter UI */
+/* 6. Update the Notification Counter UI */
+/*─────────────────────────────────────*/
 function updateNotificationCounter(count) {
   const bellIcon = document.querySelector(".bell");
   const existingCounter = document.querySelector(".notification-counter");
@@ -162,39 +177,49 @@ function updateNotificationCounter(count) {
 }
 
 /*─────────────────────────────────────*/
-/* 6. Fetch Posts from Followed Categories (Updated to Use `media_url` & Resize Videos) */
+/* 7. Fetch Posts from Followed Categories */
+/*    (Skip posts that have been cleared)  */
+/*─────────────────────────────────────*/
 async function fetchFollowedPosts(loggedInUserId) {
   try {
     const postsContainer = document.querySelector(".posts") || document.getElementById("postsContainer");
     const userCategoryQuery = query(collection(db, "UserCategory"), where("user_id", "==", loggedInUserId));
     const followedCategoriesSnapshot = await getDocs(userCategoryQuery);
-
+    
     if (followedCategoriesSnapshot.empty) {
       postsContainer.innerHTML = "<p>You are not following any categories.</p>";
       return;
     }
-
+    
     const followedCategoryIds = followedCategoriesSnapshot.docs.map(doc => doc.data().category_id);
     const postsQuery = query(collection(db, "Posts"), where("category_id", "in", followedCategoryIds));
     const postsSnapshot = await getDocs(postsQuery);
-
+    
     postsContainer.innerHTML = "";
-
+    
     postsSnapshot.forEach(postDoc => {
       const post = postDoc.data();
+      
+      // If post is cleared (empty title and content) then skip it
+      if ((!post.title || post.title.trim() === "") && (!post.content || (post.content && post.content.trim() === ""))) {
+        return;
+      }
+      
       const postElement = document.createElement("div");
       postElement.classList.add("post-button");
-
-      postElement.innerHTML = `<h3>${post.title}</h3>`;
-
+      
+      // Build inner HTML based on post type.
+      let innerHTML = `<h3>${post.title || "Untitled Post"}</h3>`;
+      
       if (post.type === "audio") {
-        postElement.innerHTML += `<audio controls src="${post.media_url}" crossorigin="anonymous"></audio>`;
+        innerHTML += `<audio controls src="${post.media_url}" crossorigin="anonymous"></audio>`;
       } else if (post.type === "video") {
-        postElement.innerHTML += `<video controls width="400px" height="250px" src="${post.media_url}"></video>`;
+        innerHTML += `<video controls width="400px" height="250px" src="${post.media_url}"></video>`;
       } else {
-        postElement.innerHTML += `<p>${post.content}</p>`;
+        innerHTML += `<p>${post.content}</p>`;
       }
-
+      
+      postElement.innerHTML = innerHTML;
       postsContainer.appendChild(postElement);
     });
   } catch (error) {
