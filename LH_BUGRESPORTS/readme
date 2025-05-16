@@ -2,14 +2,11 @@ this folder made for document the bug reports after executing the test cases for
 the structure of the folder is :
                     LH_BUGREPORTS/
                         TAPS
-                         LH_BR_FEATURENAME.xlsx
-                                   BUG REPORT ID : LH-BR-FEATURENAME-001-A
-                                                 : LH-BR-FEATURENAME-001-B
+                         LH_BR.xlsx
+                                   BUG REPORT ID : LH-BUG-001
+                                                 : LH-BUG-002
                                         NOTICE :001 is the number of associated test case 
-                                              : A,B.....Z is for the bug reports related to the same test case
-                                              if the test case LH-TC-PUBLISHARTICLE-002 has 3 bug report
-                                              there will be :LH-BR-PUBLISHARTICLE-002-A
-                                                            :LH-BR-PUBLISHARTICLE-002-B
-                                                            :LH-BP-PUBLISHARTICLE-002-C
+                                            
+                                        
                                   
                                     

@@ -4,7 +4,7 @@ import {
   getDocs, 
   query, 
   where, 
-  deleteDoc, 
+  updateDoc, 
   doc 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -12,7 +12,7 @@ import {
 const searchInput = document.querySelector('input[type="text"]');
 const searchButton = document.querySelector('.btn.search');
 const resultsContainer = document.getElementById("resultsContainer");
-const deleteButton = document.querySelector('.btn.delete');
+const clearButton = document.querySelector('.btn.delete');
 const welcomeDiv = document.querySelector('.welcome');
 
 let selectedPostId = null;
@@ -58,7 +58,7 @@ async function fetchUsername(userId) {
  * Then, query the Posts collection to display posts belonging to that user.
  */
 searchButton.addEventListener('click', async () => {
-  // Clear any previous results and reset selection.
+  // Clear previous results and reset selection.
   resultsContainer.innerHTML = "";
   selectedPostId = null;
   
@@ -102,9 +102,8 @@ searchButton.addEventListener('click', async () => {
       
       // Allow selection of the post.
       postDiv.addEventListener("click", () => {
-        // Remove any previous selection.
-        const allPosts = document.querySelectorAll('.content-result');
-        allPosts.forEach(post => post.classList.remove("selected"));
+        // Remove previous selection.
+        document.querySelectorAll('.content-result').forEach(post => post.classList.remove("selected"));
         postDiv.classList.add("selected");
         selectedPostId = docSnap.id;
       });
@@ -118,31 +117,39 @@ searchButton.addEventListener('click', async () => {
 });
 
 /**
- * Delete button event: delete the selected post from Firestore.
+ * Clear button event: remove content and attributes while preserving the post ID.
  */
-deleteButton.addEventListener('click', async () => {
+clearButton.addEventListener('click', async () => {
   if (!selectedPostId) {
-    alert("Please select a post to delete.");
+    alert("Please select a post to clear.");
     return;
   }
-  
-  if (!confirm("Are you sure you want to delete the selected post?")) {
+
+  if (!confirm("Are you sure you want to clear the contents of the selected post?")) {
     return;
   }
-  
+
   try {
-    // Delete the post document.
-    await deleteDoc(doc(db, "Posts", selectedPostId));
-    alert("Post deleted successfully.");
-    
-    // Remove the deleted post from the UI.
+    // Update the post document instead of deleting it.
+    await updateDoc(doc(db, "Posts", selectedPostId), {
+      title: "",
+      content: "",
+      user_id: "",
+      timestamp: null
+    });
+
+    alert("Post cleared successfully.");
+
+    // Update the UI accordingly.
     const selectedElement = document.querySelector('.content-result.selected');
     if (selectedElement) {
-      selectedElement.remove();
+      selectedElement.textContent = `Content ID: ${selectedPostId} (Post cleared)`;
+      selectedElement.classList.remove("selected");
     }
+    
     selectedPostId = null;
   } catch (error) {
-    console.error("Error deleting post:", error);
-    alert("Failed to delete the post.");
+    console.error("Error clearing post:", error);
+    alert("Failed to clear the post.");
   }
 });
