@@ -1,0 +1,70 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 10px 20px;
+}
+
+.welcome {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.admin-main {
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: left;
+    color: #888;
+    margin-bottom: 20px;
+    margin-left: 80px;
+}
+
+/* Make the admin tools label and dropdown inline */
+.admin-tools {
+    width: 90%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-tools label {
+    margin: 0;
+    color: #555;
+    font-size: 16px;
+}
+
+.admin-tools select {
+    width: auto; /* Adjusts width to fit the content */
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.post, .posts .post-button {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 5px;
+}

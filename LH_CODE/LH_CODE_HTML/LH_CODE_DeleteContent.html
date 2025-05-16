@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Delete Content</title>
+  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_deletecontent.css" />
+  <script type="module" src="../LH_CODE_JS/LH_CODE_deletecontent.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+          <a href="../LH_CODE_HTML/LH_CODE_AdminHome.html"> <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo"></a>
+    </div>
+    <!-- Dynamic username wil be placed here -->
+    <div class="welcome">Welcome, Loading...</div>
+  </header>
+
+  <main class="admin-main">
+    <h1>Delete Content</h1>
+    <input type="text" placeholder="Search by username" />
+    <button class="btn search">Search</button>
+
+    <!-- Container where search results (posts) will be injected -->
+    <div id="resultsContainer"></div>
+
+    <button class="btn delete">Delete</button>
+    <button class="btn cancel" onclick="location.href='../LH_CODE_HTML/LH_CODE_AdminHome.html'">Cancel</button>
+  </main>
+</body>
+</html>

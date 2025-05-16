@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Delete User</title>
+  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_deleteuser.css" />
+  <script type="module" defer src="../LH_CODE_JS/LH_CODE_deleteuser.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+          <a href="../LH_CODE_HTML/LH_CODE_AdminHome.html"> <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo"></a>
+    </div>
+    <div class="welcome">Welcome, Loading...</div>
+  </header>
+
+  <main class="admin-main">
+    <h1>Delete User</h1>
+    <input type="text" id="searchUsername" placeholder="Search by username" />
+    <button class="btn search">Search</button>
+
+    <!-- This container wil show the found user details (or error message) -->
+    <div id="userResult" class="user-result"></div>
+
+    <button class="btn delete">Delete</button>
+    <button class="btn cancel" onclick="location.href='admin-home.html'">Cancel</button>
+  </main>
+</body>
+</html>

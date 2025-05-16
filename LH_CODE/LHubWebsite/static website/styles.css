@@ -1,0 +1,251 @@
+/* Reset and base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.username {
+    font-size: 14px;
+}
+
+.notification {
+    position: relative;
+    cursor: pointer;
+}
+
+.bell {
+    font-size: 20px;
+}
+
+.dropdown {
+    position: absolute;
+    right: 0;
+    top: 25px;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.hidden {
+    display: none;
+}
+
+main {
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+button, .post-button {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.category-button, .follow-btn, .publish-btn, .btn-record, .btn-pause, .btn-upload {
+    background: #6c63ff;
+    color: white;
+    border: none;
+}
+
+.cancel-btn, .btn-cancel {
+    background: #999;
+    color: white;
+    border: none;
+    width: auto;
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+
+textarea {
+    display: block;
+    width: 90%;
+    height: 300px;
+    margin: 10px auto;
+    padding: 10px;
+    resize: vertical;
+}
+
+input[type="text"] {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.word-counter {
+    text-align: right;
+    width: 90%;
+    margin: 0 auto;
+    font-size: 12px;
+    color: #555;
+}
+
+/* Additional styles for dropdowns and buttons */
+select {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.follow-btn {
+    width: auto;
+    padding: 10px 20px;
+    margin-left: 10px;
+}
+
+.post-button {
+    border-radius: 5px;
+    margin: 10px auto;
+    width: 90%;
+    padding: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+/* Audio and video status */
+.audio-status, .video-status {
+    display: flex;
+    justify-content: flex-end;
+    width: 90%;
+    margin: 10px auto;
+    font-size: 14px;
+    color: #555;
+}
+
+.video-status small {
+    display: block;
+    color: gray;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Button group for audio and video pages */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-record, .btn-pause, .btn-upload, .btn-publish {
+    background: #6c63ff;
+    color: white;
+}
+
+.btn-cancel {
+    background: #999;
+    color: white;
+}
+/* === Admin-Specific Styles === */
+.admin-result {
+    width: 90%;
+    margin: 10px auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    color: #333;
+}
+
+.admin-button-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.admin-delete {
+    background: white;
+    color: red;
+    border: 2px solid red;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto;
+}
+
+.admin-cancel {
+    background: #999;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto;
+}
+.note {
+    text-align: right;
+    width: 90%;
+    margin: 0 auto 10px;
+    color: #555;
+    display: block;
+}
+h1, h2 {
+    text-align: left;
+    margin-left: 80px; /* Adjust as needed */
+}

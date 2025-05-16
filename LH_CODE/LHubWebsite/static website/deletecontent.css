@@ -1,0 +1,92 @@
+/* delete-content-styles.css */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 10px 20px;
+}
+
+.welcome {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.admin-main {
+    padding: 20px;
+}
+
+h1 {
+    text-align: left;
+    color: #888;
+    margin-bottom: 20px;
+    margin-left: 80px;
+}
+
+input[type="text"] {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn.search {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    background: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.content-result {
+    width: 90%;
+    margin: 20px auto;
+    padding: 15px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn.delete {
+    background: white;
+    color: red;
+    border: 2px solid red;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    width: 90%;
+}
+
+.btn.cancel {
+    background: #999;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    width: 90%;
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories</title>
+  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_categories.css">
+  <script type="module" defer src="../LH_CODE_JS/LH_CODE_categories.js"></script>
+</head>
+  
+<body>
+  <header class="header">
+    <div class="logo">
+    <a href="../LH_CODE_HTML/LH_CODE_Index.html"> <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo"></a>
+    </div>
+    <span class="username">Welcome, Loading...</span>
+  </header>
+
+  <main>
+    <h1>Categories</h1>
+
+    <!-- Category selection controls: dropdown and follow button -->
+    <div class="category-controls">
+      <select id="categorySelect">
+        <!-- Categories will be loaded dynamically -->
+      </select>
+      <button class="follow-btn">Follow</button>
+    </div>
+
+    <!-- Publish Dropdown -->
+    <div class="publish-dropdown">
+      <select id="publishSelect">
+          <option value="">Publish...</option>
+          <option value="../LH_CODE_HTML/LH_CODE_PublishArticle.html">Publish Article</option>
+          <option value="../LH_CODE_HTML/LH_CODE_PublishAudio.html">Publish Audio</option>
+          <option value="../LH_CODE_HTML/LH_CODE_PublishVideo.html">Publish Video</option>
+      </select>
+    </div>
+
+    <h2>Posts from Selected Category</h2>
+    <!-- Posts container: each post appears as a separate box -->
+    <div id="postsContainer">
+      <!-- Individual post boxes will be inserted here -->
+    </div>
+  </main>
+</body>
+</html>

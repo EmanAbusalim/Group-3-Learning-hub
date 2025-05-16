@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Home</title>
+  <link rel="stylesheet" href="../LH_CODE_CSS/LH_CODE_adminhome.css" />
+  <script type="module" src="../LH_CODE_JS/LH_CODE_AdminLogic.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+     <a href="../LH_CODE_HTML/LH_CODE_AdminHome.html"> <img src="../LH_CODE_RESOURCES/logo.png" width="70" alt="Logo"></a>
+    </div>
+    <div class="welcome">Welcome, <span class="username">Loading...</span></div>
+  </header>
+
+  
+  <main class="admin-main">
+    <div class="admin-tools">
+      <label for="admin-actions"><strong>Admin Tools:</strong></label>
+      <select id="admin-actions" onchange="handleAdminAction(this.value)">
+        <option selected disabled>Select an action</option>
+        <option value="LH_CODE_deletecontent.html">Delete Content</option>
+        <option value="LH_CODE_deleteuser.html">Delete User</option>
+      </select>
+    </div>
+
+    <h2>Posts from All Categories</h2>
+    <div class="posts"></div>
+  </main>
+</body>
+</html>

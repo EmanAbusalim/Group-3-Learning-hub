@@ -1,0 +1,121 @@
+/* Reset and Base Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Login Form Container - Wider & More Spacious */
+.login-container {
+    max-width: 500px; /* Increased width */
+    width: 90%; /* Responsive scaling */
+    padding: 3rem; /* Adds more space */
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Logo */
+.login-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Login Title */
+.login-title {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+/* Input Fields - More Padding & Space */
+.login-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px; /* Increased padding for better spacing */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f5f6fa;
+    margin-bottom: 16px; /* More space between inputs */
+}
+
+.login-input:focus {
+    outline: none;
+    border-color: #6c63ff;
+    background: #fff;
+}
+
+/* Error Messages */
+.text-danger {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Button Group - Aligned & Spaced */
+.login-btns {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px; /* Adds space between buttons */
+    margin-top: 30px;
+}
+
+/* Sign-Up Button (Stacks "New User?" above "Sign Up") */
+.btn-login-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #6c63ff;
+    color: white;
+    border-radius: 8px;
+    width: 160px;
+    height: 70px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.btn-login-link:hover {
+    background: #554ee2;
+}
+
+/* Inside Sign-Up Button */
+.btn-login-link .small-text {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.btn-login-link .large-text {
+    font-size: 1.2rem;
+}
+
+/* Sign-In Button */
+.btn-login {
+    width: 160px;
+    height: 70px;
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #554ee2;
+}

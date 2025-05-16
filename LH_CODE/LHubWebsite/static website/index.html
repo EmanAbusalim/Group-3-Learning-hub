@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home</title>
+  <link rel="stylesheet" href="index.css" />
+  <script defer src="main.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="logo.png" width="70" alt="Logo">
+    </div>
+    <div class="user-section">
+      <span class="username">Welcome, User123</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="home-header" style="display: flex; align-items: center; width: 100%;">
+      <button 
+        style="padding: 10px 20px; font-size: 16px; font-weight: bold; cursor: pointer; background: #6c63ff; color: white; border: none; border-radius: 5px; width: auto; display: inline-block; margin-left: 10px;"
+        onclick="window.location.href='categories.html'"
+      >
+        Go to categories
+      </button>
+      <h1 style="margin: 0 auto; position: relative; left: -300px; font-weight: bold;">Home</h1>
+    </div>
+
+    <!-- New Subheader -->
+    <h2 class="subheader">
+      Notifications from Followed Categories <span class="bell">🔔</span>
+    </h2>
+
+    <div class="post-button">Economy: Global Markets Brace for Impact as Central Banks Signal Interest Rate</div>
+    <div class="post-button">Sports: Champions Rise: The Underdog Story That Stunned the Football World</div>
+
+    <h2>Posts from Followed Categories (Based on Categories You Follow)</h2>
+    <div class="post-button">Kentucky Derby Coverage Expands</div>
+    <div class="post-button">Trump vs. Biden: Who Owns the Economy?</div>
+    <div class="post-button">Premier League Stars Flock to Kandima Resort</div>
+  </main>
+
+</body>
+</html>
