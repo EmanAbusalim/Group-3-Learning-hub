@@ -1,0 +1,12 @@
+this folder made for document the bug reports after executing the test cases for each feature 
+the structure of the folder is :
+                    LH_BUGREPORTS/
+                        TAPS
+                         LH_BR.xlsx
+                                   BUG REPORT ID : LH-BUG-001
+                                                 : LH-BUG-002
+                                        NOTICE :001 is the number of associated test case 
+                                            
+                                        
+                                  
+                                    
