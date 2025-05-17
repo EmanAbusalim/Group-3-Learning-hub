@@ -187,3 +187,5 @@ async function deleteAuthRecord(authUID) {
     throw error;
   }
 }
+
+
