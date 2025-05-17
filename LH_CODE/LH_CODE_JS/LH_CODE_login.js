@@ -2,6 +2,7 @@ import { auth, db } from '../LH_CODE_JS/LH_CODE_FirebaseConfig.js';
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+
 // DOM elements
 const form = document.querySelector('form');
 const emailInput = document.querySelector('input[type="email"]');
