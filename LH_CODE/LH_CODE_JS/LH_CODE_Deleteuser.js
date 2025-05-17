@@ -8,7 +8,7 @@ import {
   doc 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// DOM elementss
+// DOM elements
 const searchInput = document.getElementById("searchUsername");
 const searchButton = document.querySelector(".btn.search");
 const userResultDiv = document.getElementById("userResult");

@@ -111,28 +111,49 @@ async function fetchPosts(categoryId) {
     const postsSnapshot = await getDocs(postsQuery);
     postsContainer.innerHTML = "";
 
+    // If the snapshot is empty, show no posts available text.
     if (postsSnapshot.empty) {
       postsContainer.innerHTML = "<p>No posts available.</p>";
       return;
     }
 
+    let postsRendered = 0;
     postsSnapshot.forEach((docSnap) => {
       const post = docSnap.data();
+
+      // Consider posts with empty title and content as non-existent.
+      if (
+        (!post.title || post.title.trim() === "") &&
+        (!post.content || post.content.trim() === "")
+      ) {
+        return; // Skip non-valid post.
+      }
+
       const postElement = document.createElement("div");
       postElement.classList.add("post-button");
 
-      // Add title element.
-      const titleElement = document.createElement("h3");
-      titleElement.textContent = post.title;
-      postElement.appendChild(titleElement);
+      // Only add title element if it exists and is not empty.
+      if (post.title && post.title.trim() !== "") {
+        const titleElement = document.createElement("h3");
+        titleElement.textContent = post.title;
+        postElement.appendChild(titleElement);
+      }
 
-      // Add content element.
-      const contentElement = document.createElement("p");
-      contentElement.textContent = post.content;
-      postElement.appendChild(contentElement);
-      
+      // Only add content element if it exists and is not empty.
+      if (post.content && post.content.trim() !== "") {
+        const contentElement = document.createElement("p");
+        contentElement.textContent = post.content;
+        postElement.appendChild(contentElement);
+      }
+
       postsContainer.appendChild(postElement);
+      postsRendered++;
     });
+
+    // If no valid posts were rendered, show a "no posts available" message.
+    if (postsRendered === 0) {
+      postsContainer.innerHTML = "<p>No posts available.</p>";
+    }
   } catch (error) {
     console.error("Error fetching posts:", error);
     postsContainer.innerHTML = "<p>Error loading posts</p>";
