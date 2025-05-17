@@ -1,6 +1,16 @@
 import { auth, db } from './LH_CODE_FirebaseConfig.js';
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, setDoc, getDocs, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  doc, 
+  setDoc, 
+  getDocs, 
+  collection, 
+  query, 
+  where, 
+  serverTimestamp, 
+  runTransaction 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 
 // DOM Elements
 const form = document.getElementById('registrationForm');
@@ -14,7 +24,7 @@ const registerBtn = document.getElementById('registerBtn');
 passwordField.addEventListener('focus', () => infoBubble.style.display = 'block');
 passwordField.addEventListener('blur', () => infoBubble.style.display = 'none');
 
-// Error display
+// Error display functions
 function showError(elementId, message) {
     const element = document.getElementById(elementId);
     element.textContent = message;
@@ -81,7 +91,10 @@ async function validateEmail() {
 function validatePassword() {
     const password = passwordField.value;
     const requirements = [
-        /.{8,}/, /[0-9]/, /[A-Z]/, /[^A-Za-z0-9]/
+        /.{8,}/,      // at least 8 characters
+        /[0-9]/,      // at least one number
+        /[A-Z]/,      // at least one uppercase letter
+        /[^A-Za-z0-9]/ // at least one special character
     ];
     const isValid = requirements.every(r => r.test(password));
     if (!isValid) {
@@ -92,7 +105,7 @@ function validatePassword() {
     return true;
 }
 
-// Validate all
+// Validate all fields
 async function validateAll() {
     clearError('usernameError');
     clearError('emailError');
@@ -106,25 +119,34 @@ async function validateAll() {
     return validations.every(v => v);
 }
 
-// Generate next user_id (u001 → u002 etc.)
+// Generate a unique user_id using a Firestore transaction on the "userCounter"
 async function generateNextUserId() {
-    const snapshot = await getDocs(collection(db, "Users"));
-    let maxId = 0;
-    snapshot.forEach(doc => {
-        const data = doc.data();
-        const id = data.user_id;
-        if (id && id.startsWith('u')) {
-            const num = parseInt(id.substring(1));
-            if (!isNaN(num) && num > maxId) {
-                maxId = num;
+    const counterDocRef = doc(db, "counters", "userCounter");
+    try {
+        const newCount = await runTransaction(db, async (transaction) => {
+            const counterDoc = await transaction.get(counterDocRef);
+            let newCount;
+            if (!counterDoc.exists()) {
+                // If the counter doesn't exist, initialize it.
+                // If you already have 3 users, manually set the count to 3 in Firestore.
+                newCount = 1;
+                transaction.set(counterDocRef, { count: newCount });
+            } else {
+                // Increment the existing counter.
+                newCount = counterDoc.data().count + 1;
+                transaction.update(counterDocRef, { count: newCount });
             }
-        }
-    });
-    const nextId = maxId + 1;
-    return `u${nextId.toString().padStart(3, '0')}`;
+            return newCount;
+        });
+        // Format the user_id as "u" followed by a zero-padded number (e.g., u001, u002, ...)
+        return `u${newCount.toString().padStart(3, '0')}`;
+    } catch (error) {
+        console.error("Transaction failed:", error);
+        throw error;
+    }
 }
 
-// Submit
+// Form submission event for registration
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     registerBtn.disabled = true;
@@ -138,22 +160,24 @@ form.addEventListener('submit', async (e) => {
 
     try {
         const userCredential = await createUserWithEmailAndPassword(
-            auth, 
-            emailField.value.trim(), 
+            auth,
+            emailField.value.trim(),
             passwordField.value
         );
-
+        
+        // Generate a unique user_id for this user
         const userId = await generateNextUserId();
-
+        
+        // Save user details in the "Users" collection using the generated ID
         await setDoc(doc(db, "Users", userId), {
             user_id: userId,
             username: usernameField.value.trim(),
             email: emailField.value.trim(),
-            password: passwordField.value, // plain text (dummy only)
+            password: passwordField.value, // For demo purposes only; use hashing in real-world apps!
             role: 'user',
             created_at: serverTimestamp()
         });
-
+        
         showError('formError', 'Registration successful! Redirecting...');
         document.getElementById('formError').style.color = 'green';
         setTimeout(() => {
@@ -169,7 +193,7 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// Real-time validation
+// Real-time validation event listeners
 usernameField.addEventListener('input', () => validateUsername());
 emailField.addEventListener('input', () => validateEmail());
 passwordField.addEventListener('input', () => validatePassword());

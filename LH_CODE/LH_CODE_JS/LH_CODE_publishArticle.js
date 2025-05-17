@@ -11,8 +11,9 @@ import {
   increment 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+
 /**
-  Checks whether the Firestore record for the given user exists.
+ * Checks whether the Firestore record for the given user exists.
  * Returns true if the document is found, false otherwise.
  */
 async function checkUserValidity(userId) {
