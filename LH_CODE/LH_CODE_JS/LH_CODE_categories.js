@@ -230,4 +230,5 @@ async function updateFollowButtonText() {
     console.error("Error checking follow status:", error);
     followButton.textContent = "Follow";
   }
+  
 }
